@@ -1,0 +1,22 @@
+{
+  "name": "adventure-game-by-abi",
+  "version": "1.0.0",
+  "description": "functional adventure game",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "tsc-watch --onsuccess \"node dist/index.js\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Abishai Kashif",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/inquirer": "^9.0.7",
+    "tsc-watch": "^6.0.0"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "inquirer": "^9.3.1"
+  }
+}
