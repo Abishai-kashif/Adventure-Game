@@ -11,10 +11,9 @@ import chalk from "chalk";
 const LIGHT_BLUE = "#E1F7F5";
 const TEEL_GREEN = "#A3FFD6";
 const LIGHT_GREEN = "#D8EFD3";
-// const LIGHT_BLUE = "#CDE8E5";
 async function initializeGame() {
     console.clear();
-    // welcome message
+    //welcome message
     console.log(`\n
 			    ${`${chalk.hex(LIGHT_BLUE).bold("-".repeat(26))}`}		
 		\t${chalk.hex(LIGHT_BLUE).bold("<<<")} ${chalk
@@ -25,12 +24,13 @@ async function initializeGame() {
 			    ${`${chalk.hex(LIGHT_BLUE).bold("-".repeat(26))}\n`}
 		`);
     const opponents = new Map();
-    // creating opponents
+    //creating opponents
     [
         new Opponent("Skeleton"),
         new Opponent("Assassin", 150, 25),
         new Opponent("Zombie", 200, 30),
     ].forEach((opponent) => opponents.set(opponent.name, opponent));
+    //prompted to enter their name and choose an opponent
     const answer = await inquirer.prompt([
         {
             name: "name",
@@ -54,22 +54,21 @@ async function initializeGame() {
     ]);
     await startGame(new Player(answer.name), opponents.get(answer.opponent));
 }
-// function for start game
 export default async function startGame(player, currOpponent) {
     console.clear();
-    // getting opponent & player HP
     const playerHP = player.currHealth <= 25
-        ? chalk.red(`${player.currHealth}`)
+        ? chalk.red(`${player.currHealth}`.padStart(2, "0"))
         : chalk.yellow(`${player.currHealth}`);
     const opponentHP = currOpponent.currHealth <= 25
-        ? chalk.red(`${currOpponent.currHealth}`)
+        ? chalk.red(`${currOpponent.currHealth}`.padStart(2, "0"))
         : chalk.yellow(`${currOpponent.currHealth}`);
+    // displays opponent and player health
     console.log(chalk.whiteBright.bold.italic(`
 
-		${chalk.gray.italic(`(HP: ${playerHP})`)} ${chalk.greenBright(player.name.trim())}	VS	${chalk.red(currOpponent.name)} ${chalk.gray.italic(`(HP: ${opponentHP})`)}
+		${chalk.gray.italic(`(HP: ${playerHP})`)} ${chalk.greenBright(player.name.trim())}    VS    ${chalk.red(currOpponent.name)} ${chalk.gray.italic(`(HP: ${opponentHP})`)}
 
 		`));
-    // individual if condition for player and opponent to decide who win
+    // checks for victory conditions
     if (player.currHealth <= 0) {
         console.clear();
         console.log(chalk.whiteBright.bold(`\n\n\n\t\t\t   -: The Winner is ${chalk.red.bold.italic(currOpponent.name)} :-`));
@@ -81,6 +80,7 @@ export default async function startGame(player, currOpponent) {
         await endGame();
     }
     else {
+        //prompt user for for actions
         const command = await inquirer.prompt({
             name: "command",
             type: "list",
@@ -101,13 +101,14 @@ export default async function startGame(player, currOpponent) {
 }
 export async function endGame() {
     console.log("\n\n");
+    //when game ends user is prompted if they want to play again
     const answer = await inquirer.prompt({
         name: "want",
         type: "confirm",
         message: chalk.hex(LIGHT_GREEN).bold("Do you want's to play again: "),
     });
     if (answer.want) {
-        // resetting all values
+        //reset all values and re-initailize the game
         resetGameVariables();
         await initializeGame();
     }
@@ -115,4 +116,5 @@ export async function endGame() {
         process.exit();
     }
 }
+//starting the process
 await initializeGame();
